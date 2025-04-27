@@ -16,16 +16,17 @@ const app = express();
 
 // Configuración de CORS
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  origin: ['http://localhost:3000', process.env.FRONTEND_URL].filter(Boolean),
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 
 // Middleware de seguridad
 app.use(helmet());
 app.use(cors(corsOptions));
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({ limit: '50 Mg' }));
 app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp());
