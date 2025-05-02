@@ -1,33 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    });
-
-    console.log(`MongoDB conectado: ${conn.connection.host}`);
-
-    // Manejo de eventos de conexión
-    mongoose.connection.on('error', (err) => {
-      console.error('Error de conexión a MongoDB:', err);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      console.log('MongoDB desconectado');
-    });
-
-    // Manejo de reconexión
-    mongoose.connection.on('reconnected', () => {
-      console.log('MongoDB reconectado');
-    });
-
+    await mongoose.connect(process.env.DB_URL);
+    console.log("Conexión correcta con la BBDD");
   } catch (error) {
-    console.error(`Error de conexión a MongoDB: ${error.message}`);
-    console.log('Por favor, asegúrate de que MongoDB esté instalado y ejecutándose');
-    process.exit(1);
+    console.log("Error conectando a la BBDD");
   }
-};
+}
 
-module.exports = { connectDB };
+module.exports = { connectDB }

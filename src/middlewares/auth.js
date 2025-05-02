@@ -3,6 +3,7 @@ const { verifyJwt } = require("../config/jwt");
 
 const isAuth = async (req, res, next) => {
   try {
+    // validar si mi token existe y luego si es el que yo he creado
     const token = req.headers.authorization;
 
     if (!token) {

@@ -1,19 +1,17 @@
 const Course = require("../models/courses");
 const Subject = require("../models/subjects");
 
-const postSubjects = async (req, res) => {
+const postSubject = async (req, res) => {
   try {
-    const newSubject = new Subject(req.body)
-
-    const subject = await newSubject.save()
-
-    return res.status(201).json(subject)
+    const newSubject = new Subject(req.body);
+    const subject = await newSubject.save();
+    return res.status(201).json(subject);
   } catch (error) {
-    return res.status(400).json(error)
+    return res.status(400).json("error");
   }
-}
+};
 
-const deleteSubjects = async (req, res) => {
+const deleteSubject = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -27,10 +25,10 @@ const deleteSubjects = async (req, res) => {
     }
 
     await Subject.findByIdAndDelete(id);
-    return res.status(200).json("Asignatura eliminada con éxito");
+    return res.status(200).json("eliminado");
   } catch (error) {
-    return res.status(400).json("Error al eliminar la asignatura");
+    return res.status(400).json("error");
   }
 };
 
-module.exports = { postSubjects, deleteSubjects };
+module.exports = { postSubject, deleteSubject };

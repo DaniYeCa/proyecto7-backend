@@ -1,7 +1,7 @@
-const { postSubjects, deleteSubjects } = require("../controllers/subjects")
-const subjectRouter = require("express").Router()
+const { postSubject, deleteSubject } = require("../controllers/subjects");
+const subjectRouter = require("express").Router();
 
-subjectRouter.post("/", postSubjects)
-subjectRouter.delete("/:id", deleteSubjects)
+subjectRouter.post("/", postSubject);
+subjectRouter.delete("/:id", deleteSubject);
 
-module.exports = subjectRouter
+module.exports = subjectRouter;
