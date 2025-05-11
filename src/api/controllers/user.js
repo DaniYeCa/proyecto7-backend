@@ -43,17 +43,20 @@ const login = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const newUser = new User(req.body);
+    const oldUser = await User.findById(id);
 
+    if (!oldUser) {
+      return res.status(200).json("Usuario encontrado");
+    }
+
+    const newUser = new User(req.body);
     newUser.rol = "user";
 
     if (req.user.rol === "admin") {
       newUser.rol = req.body.rol;
     }
 
-    const oldUser = await User.findById(id);
     newUser._id = id;
-
     newUser.courses = [...oldUser.courses, ...newUser.courses];
 
     const user = await User.findByIdAndUpdate(id, newUser, { new: true });
@@ -63,4 +66,28 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { register, login, updateUser };
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userToDelete = await User.findById(id);
+
+    if (!userToDelete) {
+      return res.status(404).json("Usuario no encontrado");
+    }
+
+
+    if (req.user.rol === "admin") {
+      await User.findByIdAndDelete(id);
+      return res.status(200).json("Usuario eliminado correctamente");
+    } else if (req.user.rol === "user" && req.user._id.toString() === id) {
+      await User.findByIdAndDelete(id);
+      return res.status(200).json("Usuario eliminado correctamente");
+    } else {
+      return res.status(403).json("No tienes permisos para realizar esta acción");
+    }
+  } catch (error) {
+    return res.status(400).json("Error al eliminar el usuario");
+  }
+};
+
+module.exports = { register, login, updateUser, deleteUser };
